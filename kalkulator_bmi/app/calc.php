@@ -26,6 +26,12 @@ if ( $x == "") {
 if ( $y == "") {
 	$messages [] = 'Nie podano wzrostu';
 }
+if ($_POST['wiek'] == '1') {
+	$messages [] = 'Błąd. Nie wybrano przedziału wiekowego.';
+}
+ if (! isset($_POST['plec']) == '1,2,3') {
+	$messages [] = 'Błąd. Nie wybrano płci';
+} 
 
 //nie ma sensu walidować dalej gdy brak parametrów
 if (empty( $messages )) {
@@ -44,9 +50,16 @@ if (empty( $messages )) {
 // 3. wykonaj zadanie jeśli wszystko w porządku
 
 if (empty ( $messages )) { // gdy brak błędów
-
-$result = round($x / ($y/100* $y/100),2);
-
+	
+ if ($_POST['wiek'] == '2'){
+	$result = round($x / ($y/100* $y/100),2); } 
+	else if ($_POST['wiek'] == '3'){
+	$result = round($x / (($y/100* $y/100)+0.002),2); } 
+	else if ($_POST['wiek'] == '4'){
+	$result = round($x / (($y/100* $y/100)+0.004),2); } 
+	else if ($_POST['wiek'] == '5'){
+	$result = round($x / (($y/100* $y/100)+0.006),2);
+	} else {$result = round($x / (($y/100* $y/100)+0.008),2);}
 }
 
 // 4. Wywołanie widoku z przekazaniem zmiennych
