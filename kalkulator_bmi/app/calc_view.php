@@ -13,19 +13,19 @@
 
 <label><span style="color: #ea008d; font-family: 'Comic Sans MS', 'Comic Sans'; font-weight: bold;"> ✧･ﾟ: *✧･ﾟ:* Witaj w kalkulatorze BMI *:･ﾟ✧*:･ﾟ✧</span></label><br/><br/>
 
-<label>Jestem:</label><br>
-<label><input type="radio">kobietą</label>
-<label><input type="radio">mężczyzną</label>
-<label><input type="radio">wolę nie podawać</label></br></br>
+<label>Jestem: <br></label>
+<input type="radio" name="plec" id="plec" value="1">kobietą
+<input type="radio" name="plec" id="plec" value="2">mężczyzną
+<input type="radio" name="plec" id="plec" value="3">wolę nie podawać</br></br>
 
-<label>Przedział wiekowy: <select>
-  <option>Wybierz</option>
-  <option>1-15 lat</option>
-  <option>16-25 lat</option>
-  <option>26-40 lat</option>
-  <option>41-60 lat</option>
-  <option>60+</option>
-</select></label></br></br>
+<label>Przedział wiekowy: </label><select name="wiek" id="wiek">
+<option value="1">Wybierz</option>
+  <option value="2">1-15 lat</option>
+  <option value="3">16-25 lat</option>
+  <option value="4">26-40 lat</option>
+  <option value="5">41-60 lat</option>
+  <option value="6">60+</option>
+</select></br></br>
 
 <label for="id_x">Waga w kg: </label>
 	<input id="id_x" type="text" name="x" value="<?php if(isset($x)) print($x); ?>" /><br />
