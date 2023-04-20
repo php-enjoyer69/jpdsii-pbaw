@@ -67,7 +67,7 @@ class CalcCtrl {
 			$this->form->y = intval($this->form->y);
 			$this->msgs->addInfo('Uzupełniono poprawnie');
 
-         if ($this->form->wiek == '2'){
+           if ($this->form->wiek == '2'){
             $this->result->result = round($this->form->y / ($this->form->x/100* $this->form->x/100),2); }
             else if ($this->form->wiek == '3'){
             $this->result->result = round($this->form->y / (($this->form->x/100* $this->form->x/100)+0.002),2); } 
@@ -75,7 +75,7 @@ class CalcCtrl {
             $this->result->result = round($this->form->y / (($this->form->x/100* $this->form->x/100)+0.004),2); } 
             else if ($this->form->wiek == '5'){
             $this->result->result = round($this->form->y / (($this->form->x/100* $this->form->x/100)+0.006),2);
-            } else {$result = round($this->form->y / (($this->form->x/100* $this->form->x/100)+0.008),2);}
+            } else {$this->result->result = round($this->form->y / (($this->form->x/100* $this->form->x/100)+0.008),2);}
 
             $this->msgs->addInfo('Wykonano obliczenia');
 
