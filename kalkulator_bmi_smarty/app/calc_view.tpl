@@ -59,16 +59,16 @@
 										</div>
 										<h1>Jestem: </h1>
 										<div class="col-3 col-12-medium">
-											<input type="radio" id="plec" name="plec" value="1">
-											<label for="plec">Kobietą</label>
+											<input type="radio" id="plec1" name="plec" value="1">
+											<label for="plec1">Kobietą</label>
 										</div>
 										<div class="col-3 col-12-medium">
-											<input type="radio" id="plec" name="plec" value="2">
-											<label for="plec">Mężczyzną</label>
+											<input type="radio" id="plec2" name="plec" value="2">
+											<label for="plec2">Mężczyzną</label>
 										</div>
                                         <div class="col-3 col-12-medium">
-                                        <input type="radio" id="plec" name="plec" value="3">
-                                        <label for="plec">Wolę nie podawać</label>
+                                        <input type="radio" id="plec3" name="plec" value="3">
+                                        <label for="plec3">Wolę nie podawać</label>
                                     </div>
 										<div class="col-12">
 											<ul class="actions">
