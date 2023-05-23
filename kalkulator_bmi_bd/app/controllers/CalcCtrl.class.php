@@ -1,0 +1,135 @@
+<?php
+namespace app\controllers;
+
+use app\forms\CalcForm;
+use app\transfer\CalcResult;
+
+class CalcCtrl {
+
+	private $form;   
+	private $result;
+    private $records;
+
+	public function __construct(){
+		$this->form = new CalcForm();
+		$this->result = new CalcResult();
+	}
+
+    public function getParams(){
+        $this->form->x = getFromRequest('x');
+        $this->form->y = getFromRequest('y'); 
+        $this->form->plec = getFromRequest('plec');
+        $this->form->wiek = getFromRequest('wiek');	   
+    }
+
+	public function validate(){
+        if ( ! (isset($this->form->x) && isset($this->form->y) && isset($this->form->plec))) {
+            getMessages()->addError('Błędne wywołanie aplikacji. Brak jednego z parametrów');
+        }
+        
+        if ($this->form->wiek == '1') {
+            getMessages()->addError('Nie wybrano przedziału wiekowego');
+        }
+         if (! isset($this->form->plec) == '1,2,3') {
+            getMessages()->addError('Nie wybrano płci');
+        } 
+        
+        if ( $this->form->x == "") {
+            getMessages()->addError('Nie podano wagi');
+        }
+        if ( $this->form->y == "") {
+            getMessages()->addError('Nie podano wzrostu');
+        }
+        
+        if (! getMessages()->isError());
+            
+            if (! is_numeric($this->form->y) || $this->form->y<0) {
+                getMessages()->addError('Twoja waga nie jest liczbą dodatnią. Podaj poprawną wartość');
+            }
+            
+            if (! is_numeric($this->form->x) || $this->form->x<0) {
+                getMessages()->addError('Twój wzrost nie jest liczbą dodatnią. Podaj poprawną wartość');
+            }
+        
+            return ! getMessages()->isError();
+        }
+        
+        
+        public function action_calcCompute(){
+
+           $this->getParams();
+           
+           if ($this->validate()) {
+
+            $this->form->x = intval($this->form->x);
+			$this->form->y = intval($this->form->y);
+			getMessages()->addInfo('Uzupełniono poprawnie');
+
+           if ($this->form->wiek == '2'){
+            $this->result->result = round($this->form->y / ($this->form->x/100* $this->form->x/100),2); }
+            else if ($this->form->wiek == '3'){
+            $this->result->result = round($this->form->y / (($this->form->x/100* $this->form->x/100)+0.002),2); } 
+            else if ($this->form->wiek == '4'){
+            $this->result->result = round($this->form->y / (($this->form->x/100* $this->form->x/100)+0.004),2); } 
+            else if ($this->form->wiek == '5'){
+            $this->result->result = round($this->form->y / (($this->form->x/100* $this->form->x/100)+0.006),2);
+            } else {$this->result->result = round($this->form->y / (($this->form->x/100* $this->form->x/100)+0.008),2);}
+
+            try{
+				getDB()->insert("historia",[					
+					"waga"=>$this->form->x,
+					"wzrost"=>$this->form->y,
+                    "wiek"=>$this->form->wiek,
+                    "plec"=>$this->form->plec,
+                    "wynik"=>$this->result->result
+				]);
+				getMessages()->addInfo('Pomyślnie zapisano rekord');
+	
+			}
+			catch (PDOException $e){
+				getMessages()->addError('Wystąpił nieoczekiwany błąd podczas zapisu rekordu');
+				if (getConf()->debug) getMessages()->addError($e->getMessage());			
+			}
+
+            getMessages()->addInfo('Wykonano obliczenia');
+
+        }
+
+        $this->generateView();
+
+    }
+
+    public function action_calcShow(){
+		getMessages()->addInfo('Witaj w kalkulatorze');
+		$this->generateView();
+	}
+	
+	/**
+	 * Wygenerowanie widoku
+	 */
+	public function generateView(){
+ 
+		try{
+			$this->records = getDB()->select("historia", [
+					"waga",
+					"wzrost",
+                    "wiek",
+					"plec",
+					"wynik",
+				]);
+		} catch (PDOException $e){
+			getMessages()->addError('Wystąpił błąd podczas pobierania rekordów');
+			if (getConf()->debug) getMessages()->addError($e->getMessage());			
+		}
+
+		getSmarty()->assign('user',unserialize($_SESSION['user']));
+				
+		getSmarty()->assign('page_title','Kalkulator BMI - role');
+
+		getSmarty()->assign('form',$this->form);
+		getSmarty()->assign('res',$this->result);
+        getSmarty()->assign('records',$this->records);
+		
+		getSmarty()->display('CalcView.tpl');
+	}
+}
